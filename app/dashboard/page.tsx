@@ -1,4 +1,6 @@
-﻿import { db } from '@/lib/db';
+﻿export const dynamic = 'force-dynamic'
+
+import { db } from '@/lib/db';
 import { episodes, characters, blogPosts } from '@/lib/schema';
 import { sql } from 'drizzle-orm';
 import Link from 'next/link';

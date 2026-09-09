@@ -1,4 +1,6 @@
-﻿import { db } from '@/lib/db';
+﻿export const dynamic = 'force-dynamic'
+
+import { db } from '@/lib/db';
 import { episodes } from '@/lib/schema';
 import Link from 'next/link';
 import { DeleteButton } from '@/components/DeleteButton';
