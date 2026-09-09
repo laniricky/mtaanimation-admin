@@ -4,8 +4,8 @@ import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { EpisodeForm } from '@/components/EpisodeForm';
 
-export default async function EditEpisodePage({ params }: { params: { id: string } }) {
-  const ep = await db.select().from(episodes).where(eq(episodes.id, parseInt(params.id)));
+export default async function EditEpisodePage({ params }: { params: Promise<{ id: string }> }) {
+  const ep = await db.select().from(episodes).where(eq(episodes.id, parseInt((await params).id)));
   if (!ep.length) notFound();
   const e = ep[0];
   return (

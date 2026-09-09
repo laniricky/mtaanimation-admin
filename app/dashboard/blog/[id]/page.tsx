@@ -4,8 +4,8 @@ import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { BlogForm } from '@/components/BlogForm';
 
-export default async function EditBlogPage({ params }: { params: { id: string } }) {
-  const p = await db.select().from(blogPosts).where(eq(blogPosts.id, parseInt(params.id)));
+export default async function EditBlogPage({ params }: { params: Promise<{ id: string }> }) {
+  const p = await db.select().from(blogPosts).where(eq(blogPosts.id, parseInt((await params).id)));
   if (!p.length) notFound();
   const post = p[0];
   return (

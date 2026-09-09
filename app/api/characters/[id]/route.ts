@@ -14,9 +14,9 @@ export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const character = await db.select().from(characters).where(eq(characters.id, parseInt(params.id)));
+    const character = await db.select().from(characters).where(eq(characters.id, parseInt((await params).id)));
     if (!character.length) return new NextResponse('Not Found', { status: 404, headers: corsHeaders });
     return NextResponse.json(character[0], { headers: corsHeaders });
   } catch {
@@ -24,18 +24,18 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { userId } = await auth();
   if (!userId) return new NextResponse('Unauthorized', { status: 401 });
   const body = await req.json();
-  const updated = await db.update(characters).set(body).where(eq(characters.id, parseInt(params.id))).returning();
+  const updated = await db.update(characters).set(body).where(eq(characters.id, parseInt((await params).id))).returning();
   return NextResponse.json(updated[0]);
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { userId } = await auth();
   if (!userId) return new NextResponse('Unauthorized', { status: 401 });
-  await db.delete(characters).where(eq(characters.id, parseInt(params.id)));
+  await db.delete(characters).where(eq(characters.id, parseInt((await params).id)));
   return new NextResponse(null, { status: 204 });
 }
 

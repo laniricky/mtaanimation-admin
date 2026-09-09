@@ -14,9 +14,9 @@ export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const episode = await db.select().from(episodes).where(eq(episodes.id, parseInt(params.id)));
+    const episode = await db.select().from(episodes).where(eq(episodes.id, parseInt((await params).id)));
     if (!episode.length) return new NextResponse('Not Found', { status: 404, headers: corsHeaders });
     return NextResponse.json(episode[0], { headers: corsHeaders });
   } catch (error) {
@@ -24,23 +24,23 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { userId } = await auth();
     if (!userId) return new NextResponse('Unauthorized', { status: 401 });
     const body = await req.json();
-    const updated = await db.update(episodes).set(body).where(eq(episodes.id, parseInt(params.id))).returning();
+    const updated = await db.update(episodes).set(body).where(eq(episodes.id, parseInt((await params).id))).returning();
     return NextResponse.json(updated[0]);
   } catch (error) {
     return new NextResponse('Internal Error', { status: 500 });
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { userId } = await auth();
     if (!userId) return new NextResponse('Unauthorized', { status: 401 });
-    await db.delete(episodes).where(eq(episodes.id, parseInt(params.id)));
+    await db.delete(episodes).where(eq(episodes.id, parseInt((await params).id)));
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     return new NextResponse('Internal Error', { status: 500 });

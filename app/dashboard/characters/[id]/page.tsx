@@ -4,8 +4,8 @@ import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { CharacterForm } from '@/components/CharacterForm';
 
-export default async function EditCharacterPage({ params }: { params: { id: string } }) {
-  const c = await db.select().from(characters).where(eq(characters.id, parseInt(params.id)));
+export default async function EditCharacterPage({ params }: { params: Promise<{ id: string }> }) {
+  const c = await db.select().from(characters).where(eq(characters.id, parseInt((await params).id)));
   if (!c.length) notFound();
   const ch = c[0];
   return (
