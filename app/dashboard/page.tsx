@@ -37,8 +37,7 @@ export default async function DashboardOverview() {
         {stats.map((s) => (
           <Link key={s.label} href={s.href} style={{ textDecoration: 'none' }}>
             <div style={{ ...card, transition: 'border-color 0.2s, transform 0.2s' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = s.accent + '60'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(75,59,71,0.6)'; (e.currentTarget as HTMLElement).style.transform = ''; }}>
+              >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
                 <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <s.Icon size={20} color={s.accent} />

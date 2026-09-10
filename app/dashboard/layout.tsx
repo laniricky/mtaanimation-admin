@@ -54,14 +54,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
                   color: '#c5bfc2', fontSize: '14px', fontWeight: 500,
                   marginBottom: '2px', transition: 'all 0.15s',
                 }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.background = 'rgba(251,109,16,0.12)';
-                  (e.currentTarget as HTMLElement).style.color = '#FB6D10';
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.background = '';
-                  (e.currentTarget as HTMLElement).style.color = '#c5bfc2';
-                }}>
+                >
                   <Icon size={16} />
                   {label}
                 </div>

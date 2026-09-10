@@ -41,8 +41,7 @@ export default async function CharactersPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px' }}>
           {chars.map((char) => (
             <div key={char.id} style={{ ...card, overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'border-color 0.2s, transform 0.2s' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(251,109,16,0.4)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(75,59,71,0.6)'; (e.currentTarget as HTMLElement).style.transform = ''; }}>
+              >
               <div style={{ position: 'relative', height: '160px', background: '#1a1a2e' }}>
                 {char.image ? (
                   <Image src={char.image} alt={char.name} fill style={{ objectFit: 'cover' }} />

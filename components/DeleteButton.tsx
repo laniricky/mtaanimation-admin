@@ -26,8 +26,7 @@ export default function DeleteButton({ id, type }: { id: number; type: string })
         color: "#6b6580", background: "transparent", border: "none",
         cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.5 : 1, transition: "color 0.15s, background 0.15s",
       }}
-      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#F28482"; (e.currentTarget as HTMLElement).style.background = "rgba(242,132,130,0.1)"; }}
-      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#6b6580"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+      
     >
       {loading ? (
         <span style={{ width: "14px", height: "14px", border: "2px solid rgba(242,132,130,0.3)", borderTopColor: "#F28482", borderRadius: "50%", animation: "spin 0.8s linear infinite", display: "block" }} />
