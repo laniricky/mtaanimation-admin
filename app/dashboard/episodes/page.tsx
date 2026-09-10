@@ -8,106 +8,87 @@ import Image from "next/image";
 import { Plus, Film, Pencil } from "lucide-react";
 import DeleteButton from "@/components/DeleteButton";
 
+const card = { background: '#2E2E41', border: '1px solid rgba(75,59,71,0.6)', borderRadius: '14px' };
+
 export default async function EpisodesPage() {
   const eps = await db.select().from(episodes).orderBy(desc(episodes.id));
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-1">Episodes</h1>
-          <p className="text-gray-400">Manage your animation library.</p>
+          <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#f0ece8', margin: 0, letterSpacing: '-0.5px' }}>Episodes</h1>
+          <p style={{ fontSize: '14px', color: '#8a8499', margin: '6px 0 0' }}>Manage your animation library.</p>
         </div>
-        <Link
-          href="/dashboard/episodes/new"
-          className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-all shadow-sm flex items-center gap-2 self-start"
-        >
-          <Plus className="w-4 h-4" />
-          Add Episode
+        <Link href="/dashboard/episodes/new" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#FB6D10', color: '#fff', padding: '9px 18px', borderRadius: '9px', fontSize: '13px', fontWeight: 600, textDecoration: 'none', boxShadow: '0 2px 12px rgba(251,109,16,0.3)' }}>
+          <Plus size={15} /> Add Episode
         </Link>
       </div>
 
-      <div className="bg-[#1c2128] border border-gray-800 rounded-xl overflow-hidden shadow-sm">
+      <div style={{ ...card, overflow: 'hidden' }}>
         {eps.length === 0 ? (
-          <div className="p-16 text-center flex flex-col items-center justify-center">
-            <div className="w-16 h-16 bg-gray-800/50 rounded-full flex items-center justify-center mb-4">
-              <Film className="w-8 h-8 text-gray-500" />
+          <div style={{ padding: '64px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(251,109,16,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Film size={28} color="#FB6D10" />
             </div>
-            <h3 className="text-lg font-medium text-gray-200 mb-1">No episodes yet</h3>
-            <p className="text-sm text-gray-500 mb-6 max-w-sm mx-auto">
-              Start building your animation library by creating your first episode.
-            </p>
-            <Link
-              href="/dashboard/episodes/new"
-              className="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-colors"
-            >
+            <div>
+              <div style={{ fontSize: '16px', fontWeight: 600, color: '#c5bfc2' }}>No episodes yet</div>
+              <div style={{ fontSize: '13px', color: '#6b6580', marginTop: '4px' }}>Start building your animation library.</div>
+            </div>
+            <Link href="/dashboard/episodes/new" style={{ background: '#FB6D10', color: '#fff', padding: '9px 22px', borderRadius: '9px', fontSize: '13px', fontWeight: 600, textDecoration: 'none', marginTop: '8px' }}>
               Create First Episode
             </Link>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="border-b border-gray-800 text-xs font-semibold uppercase tracking-wider text-gray-500 bg-[#161b22]/50">
-                  <th className="py-4 px-6">Episode</th>
-                  <th className="py-4 px-6 hidden md:table-cell">Duration</th>
-                  <th className="py-4 px-6 hidden lg:table-cell">Featured</th>
-                  <th className="py-4 px-6 text-right">Actions</th>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ background: '#26263a', borderBottom: '1px solid rgba(75,59,71,0.5)' }}>
+                <th style={{ padding: '13px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 700, color: '#6b6580', textTransform: 'uppercase', letterSpacing: '1px' }}>Episode</th>
+                <th style={{ padding: '13px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 700, color: '#6b6580', textTransform: 'uppercase', letterSpacing: '1px' }}>Duration</th>
+                <th style={{ padding: '13px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 700, color: '#6b6580', textTransform: 'uppercase', letterSpacing: '1px' }}>Featured</th>
+                <th style={{ padding: '13px 20px', textAlign: 'right', fontSize: '11px', fontWeight: 700, color: '#6b6580', textTransform: 'uppercase', letterSpacing: '1px' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {eps.map((ep, i) => (
+                <tr key={ep.id} style={{ borderBottom: i < eps.length - 1 ? '1px solid rgba(75,59,71,0.3)' : 'none' }}>
+                  <td style={{ padding: '16px 20px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                      <div style={{ position: 'relative', width: '80px', height: '48px', borderRadius: '8px', overflow: 'hidden', background: '#1a1a2e', border: '1px solid rgba(75,59,71,0.5)', flexShrink: 0 }}>
+                        {ep.thumbnail ? (
+                          <Image src={ep.thumbnail} alt={ep.title} fill style={{ objectFit: 'cover' }} />
+                        ) : (
+                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Film size={18} color="#4a4560" />
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '14px', fontWeight: 600, color: '#d8d2d6' }}>{ep.title}</div>
+                        <div style={{ fontSize: '12px', color: '#6b6580', marginTop: '2px' }}>{ep.releaseDate ?? 'No date set'}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td style={{ padding: '16px 20px', fontSize: '13px', color: '#8a8499' }}>{ep.duration ?? '—'}</td>
+                  <td style={{ padding: '16px 20px' }}>
+                    {ep.featured ? (
+                      <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, background: 'rgba(246,189,96,0.12)', color: '#F6BD60', border: '1px solid rgba(246,189,96,0.25)' }}>Featured</span>
+                    ) : (
+                      <span style={{ color: '#4a4560', fontSize: '13px' }}>—</span>
+                    )}
+                  </td>
+                  <td style={{ padding: '16px 20px', textAlign: 'right' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
+                      <Link href={`/dashboard/episodes/${ep.id}`} title="Edit" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', borderRadius: '7px', color: '#8a8499', textDecoration: 'none', background: 'transparent' }}>
+                        <Pencil size={15} />
+                      </Link>
+                      <DeleteButton id={ep.id} type="episodes" />
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-800">
-                {eps.map((ep, i) => (
-                  <tr key={ep.id} className="hover:bg-gray-800/20 transition-colors group">
-                    <td className="py-4 px-6">
-                      <div className="flex items-center gap-4">
-                        <div className="relative w-24 h-14 rounded-lg overflow-hidden bg-gray-800 flex-shrink-0 border border-gray-700">
-                          {ep.thumbnail ? (
-                            <Image src={ep.thumbnail} alt={ep.title} fill className="object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <Film className="w-5 h-5 text-gray-600" />
-                            </div>
-                          )}
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-200 group-hover:text-indigo-300 transition-colors leading-snug">
-                            {ep.title}
-                          </p>
-                          <p className="text-xs text-gray-500 mt-0.5">
-                            {ep.releaseDate ?? "No date set"}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-6 hidden md:table-cell">
-                      <span className="text-sm text-gray-400">{ep.duration ?? "—"}</span>
-                    </td>
-                    <td className="py-4 px-6 hidden lg:table-cell">
-                      {ep.featured ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                          Featured
-                        </span>
-                      ) : (
-                        <span className="text-sm text-gray-600">—</span>
-                      )}
-                    </td>
-                    <td className="py-4 px-6 text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <Link
-                          href={`/dashboard/episodes/${ep.id}`}
-                          className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-                          title="Edit"
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </Link>
-                        <DeleteButton id={ep.id} type="episodes" />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
     </div>

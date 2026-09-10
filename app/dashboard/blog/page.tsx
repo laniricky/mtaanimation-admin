@@ -7,85 +7,66 @@ import Link from "next/link";
 import { Plus, FileText, Pencil, CalendarDays, User2 } from "lucide-react";
 import DeleteButton from "@/components/DeleteButton";
 
+const card = { background: '#2E2E41', border: '1px solid rgba(75,59,71,0.6)', borderRadius: '14px' };
+
 export default async function BlogPage() {
   const posts = await db.select().from(blogPosts).orderBy(desc(blogPosts.id));
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-1">Blog Posts</h1>
-          <p className="text-gray-400">Manage your news and behind-the-scenes content.</p>
+          <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#f0ece8', margin: 0, letterSpacing: '-0.5px' }}>Blog Posts</h1>
+          <p style={{ fontSize: '14px', color: '#8a8499', margin: '6px 0 0' }}>Manage news and behind-the-scenes content.</p>
         </div>
-        <Link
-          href="/dashboard/blog/new"
-          className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-all shadow-sm flex items-center gap-2 self-start"
-        >
-          <Plus className="w-4 h-4" />
-          New Post
+        <Link href="/dashboard/blog/new" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#FB6D10', color: '#fff', padding: '9px 18px', borderRadius: '9px', fontSize: '13px', fontWeight: 600, textDecoration: 'none', boxShadow: '0 2px 12px rgba(251,109,16,0.3)' }}>
+          <Plus size={15} /> New Post
         </Link>
       </div>
 
-      <div className="bg-[#1c2128] border border-gray-800 rounded-xl overflow-hidden shadow-sm">
+      <div style={{ ...card, overflow: 'hidden' }}>
         {posts.length === 0 ? (
-          <div className="p-16 text-center flex flex-col items-center justify-center">
-            <div className="w-16 h-16 bg-gray-800/50 rounded-full flex items-center justify-center mb-4">
-              <FileText className="w-8 h-8 text-gray-500" />
+          <div style={{ padding: '64px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(132,165,157,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <FileText size={28} color="#84A59D" />
             </div>
-            <h3 className="text-lg font-medium text-gray-200 mb-1">No blog posts yet</h3>
-            <p className="text-sm text-gray-500 mb-6 max-w-sm mx-auto">
-              Share your behind-the-scenes stories and production updates.
-            </p>
-            <Link
-              href="/dashboard/blog/new"
-              className="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-colors"
-            >
+            <div>
+              <div style={{ fontSize: '16px', fontWeight: 600, color: '#c5bfc2' }}>No blog posts yet</div>
+              <div style={{ fontSize: '13px', color: '#6b6580', marginTop: '4px' }}>Share your behind-the-scenes stories and updates.</div>
+            </div>
+            <Link href="/dashboard/blog/new" style={{ background: '#FB6D10', color: '#fff', padding: '9px 22px', borderRadius: '9px', fontSize: '13px', fontWeight: 600, textDecoration: 'none', marginTop: '8px' }}>
               Write First Post
             </Link>
           </div>
         ) : (
-          <div className="divide-y divide-gray-800">
-            {/* Table header */}
-            <div className="grid grid-cols-12 gap-4 py-3 px-6 text-xs font-semibold uppercase tracking-wider text-gray-500 bg-[#161b22]/50">
-              <div className="col-span-6">Post</div>
-              <div className="col-span-2 hidden md:block">Author</div>
-              <div className="col-span-2 hidden lg:block">Date</div>
-              <div className="col-span-2 text-right">Actions</div>
+          <>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto auto', padding: '12px 20px', background: '#26263a', borderBottom: '1px solid rgba(75,59,71,0.5)', gap: '16px', alignItems: 'center' }}>
+              <div style={{ fontSize: '11px', fontWeight: 700, color: '#6b6580', textTransform: 'uppercase', letterSpacing: '1px' }}>Post</div>
+              <div style={{ fontSize: '11px', fontWeight: 700, color: '#6b6580', textTransform: 'uppercase', letterSpacing: '1px' }}>Author</div>
+              <div style={{ fontSize: '11px', fontWeight: 700, color: '#6b6580', textTransform: 'uppercase', letterSpacing: '1px' }}>Date</div>
+              <div style={{ fontSize: '11px', fontWeight: 700, color: '#6b6580', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'right' }}>Actions</div>
             </div>
-            {posts.map((post) => (
-              <div
-                key={post.id}
-                className="grid grid-cols-12 gap-4 py-4 px-6 hover:bg-gray-800/20 transition-colors items-center group"
-              >
-                <div className="col-span-6 md:col-span-6">
-                  <p className="font-semibold text-sm text-gray-200 group-hover:text-indigo-300 transition-colors leading-snug">
-                    {post.title}
-                  </p>
-                  {post.snippet && (
-                    <p className="text-xs text-gray-500 mt-1 line-clamp-1">{post.snippet}</p>
-                  )}
+            {posts.map((post, i) => (
+              <div key={post.id} style={{ display: 'grid', gridTemplateColumns: '1fr auto auto auto', padding: '16px 20px', borderBottom: i < posts.length - 1 ? '1px solid rgba(75,59,71,0.3)' : 'none', gap: '16px', alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontSize: '14px', fontWeight: 600, color: '#d8d2d6' }}>{post.title}</div>
+                  {post.snippet && <div style={{ fontSize: '12px', color: '#6b6580', marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '400px' }}>{post.snippet}</div>}
                 </div>
-                <div className="col-span-2 hidden md:flex items-center gap-1.5">
-                  <User2 className="w-3.5 h-3.5 text-gray-600 flex-shrink-0" />
-                  <span className="text-sm text-gray-400 truncate">{post.author ?? "—"}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#8a8499', whiteSpace: 'nowrap' }}>
+                  <User2 size={13} color="#6b6580" /> {post.author ?? '—'}
                 </div>
-                <div className="col-span-2 hidden lg:flex items-center gap-1.5">
-                  <CalendarDays className="w-3.5 h-3.5 text-gray-600 flex-shrink-0" />
-                  <span className="text-sm text-gray-400">{post.date ?? "—"}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#8a8499', whiteSpace: 'nowrap' }}>
+                  <CalendarDays size={13} color="#6b6580" /> {post.date ?? '—'}
                 </div>
-                <div className="col-span-6 md:col-span-2 flex items-center justify-end gap-1">
-                  <Link
-                    href={`/dashboard/blog/${post.id}`}
-                    className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-                    title="Edit"
-                  >
-                    <Pencil className="w-4 h-4" />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'flex-end' }}>
+                  <Link href={`/dashboard/blog/${post.id}`} title="Edit" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', borderRadius: '7px', color: '#8a8499', textDecoration: 'none' }}>
+                    <Pencil size={15} />
                   </Link>
                   <DeleteButton id={post.id} type="blog" />
                 </div>
               </div>
             ))}
-          </div>
+          </>
         )}
       </div>
     </div>

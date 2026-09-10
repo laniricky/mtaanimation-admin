@@ -7,71 +7,61 @@ import Image from "next/image";
 import { Plus, Users, Pencil } from "lucide-react";
 import DeleteButton from "@/components/DeleteButton";
 
+const card = { background: '#2E2E41', border: '1px solid rgba(75,59,71,0.6)', borderRadius: '14px' };
+
 export default async function CharactersPage() {
   const chars = await db.select().from(characters);
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-1">Characters</h1>
-          <p className="text-gray-400">Manage the cast of Mtaanimation.</p>
+          <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#f0ece8', margin: 0, letterSpacing: '-0.5px' }}>Characters</h1>
+          <p style={{ fontSize: '14px', color: '#8a8499', margin: '6px 0 0' }}>Manage the cast of Mtaanimation.</p>
         </div>
-        <Link
-          href="/dashboard/characters/new"
-          className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-all shadow-sm flex items-center gap-2 self-start"
-        >
-          <Plus className="w-4 h-4" />
-          Add Character
+        <Link href="/dashboard/characters/new" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#FB6D10', color: '#fff', padding: '9px 18px', borderRadius: '9px', fontSize: '13px', fontWeight: 600, textDecoration: 'none', boxShadow: '0 2px 12px rgba(251,109,16,0.3)' }}>
+          <Plus size={15} /> Add Character
         </Link>
       </div>
 
       {chars.length === 0 ? (
-        <div className="bg-[#1c2128] border border-gray-800 rounded-xl p-16 text-center flex flex-col items-center justify-center">
-          <div className="w-16 h-16 bg-gray-800/50 rounded-full flex items-center justify-center mb-4">
-            <Users className="w-8 h-8 text-gray-500" />
+        <div style={{ ...card, padding: '64px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+          <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(246,189,96,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Users size={28} color="#F6BD60" />
           </div>
-          <h3 className="text-lg font-medium text-gray-200 mb-1">No characters yet</h3>
-          <p className="text-sm text-gray-500 mb-6 max-w-sm mx-auto">
-            Build your roster by adding your first character.
-          </p>
-          <Link
-            href="/dashboard/characters/new"
-            className="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-colors"
-          >
+          <div>
+            <div style={{ fontSize: '16px', fontWeight: 600, color: '#c5bfc2' }}>No characters yet</div>
+            <div style={{ fontSize: '13px', color: '#6b6580', marginTop: '4px' }}>Build your roster by adding your first character.</div>
+          </div>
+          <Link href="/dashboard/characters/new" style={{ background: '#FB6D10', color: '#fff', padding: '9px 22px', borderRadius: '9px', fontSize: '13px', fontWeight: 600, textDecoration: 'none', marginTop: '8px' }}>
             Add First Character
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px' }}>
           {chars.map((char) => (
-            <div
-              key={char.id}
-              className="bg-[#1c2128] border border-gray-800 rounded-xl overflow-hidden shadow-sm hover:border-gray-700 hover:-translate-y-0.5 transition-all duration-200 flex flex-col group"
-            >
-              <div className="relative h-44 bg-gray-800">
+            <div key={char.id} style={{ ...card, overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'border-color 0.2s, transform 0.2s' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(251,109,16,0.4)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(75,59,71,0.6)'; (e.currentTarget as HTMLElement).style.transform = ''; }}>
+              <div style={{ position: 'relative', height: '160px', background: '#1a1a2e' }}>
                 {char.image ? (
-                  <Image src={char.image} alt={char.name} fill className="object-cover" />
+                  <Image src={char.image} alt={char.name} fill style={{ objectFit: 'cover' }} />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <Users className="w-10 h-10 text-gray-600" />
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Users size={36} color="#4a4560" />
                   </div>
                 )}
               </div>
-              <div className="p-4 flex-1 flex flex-col gap-2">
-                <div>
-                  <h3 className="font-semibold text-gray-100 group-hover:text-indigo-300 transition-colors">{char.name}</h3>
+              <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#d8d2d6', margin: '0 0 4px' }}>{char.name}</h3>
                   {char.description && (
-                    <p className="text-sm text-gray-500 mt-1 line-clamp-2">{char.description}</p>
+                    <p style={{ fontSize: '12px', color: '#6b6580', margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{char.description}</p>
                   )}
                 </div>
-                <div className="flex items-center justify-end gap-1 mt-auto pt-2 border-t border-gray-800">
-                  <Link
-                    href={`/dashboard/characters/${char.id}`}
-                    className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-                    title="Edit"
-                  >
-                    <Pencil className="w-4 h-4" />
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '4px', marginTop: '14px', paddingTop: '12px', borderTop: '1px solid rgba(75,59,71,0.4)' }}>
+                  <Link href={`/dashboard/characters/${char.id}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', borderRadius: '7px', color: '#8a8499', textDecoration: 'none' }} title="Edit">
+                    <Pencil size={14} />
                   </Link>
                   <DeleteButton id={char.id} type="characters" />
                 </div>

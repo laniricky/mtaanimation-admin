@@ -7,126 +7,104 @@ import { Film, Users, FileText, ArrowRight, PlayCircle, Plus } from "lucide-reac
 import Link from "next/link";
 import Image from "next/image";
 
+const card = {
+  background: '#2E2E41',
+  border: '1px solid rgba(75,59,71,0.6)',
+  borderRadius: '14px',
+  padding: '24px',
+};
+
 export default async function DashboardOverview() {
-  const allEpisodes = await db.select().from(episodes).orderBy(desc(episodes.id)).limit(4);
-  const allCharacters = await db.select().from(characters).limit(1000);
+  const allEpisodes = await db.select().from(episodes).orderBy(desc(episodes.id)).limit(5);
+  const allCharacters = await db.select().from(characters);
   const allPosts = await db.select().from(blogPosts).orderBy(desc(blogPosts.id)).limit(4);
 
   const stats = [
-    {
-      label: "Total Episodes",
-      value: allEpisodes.length,
-      icon: Film,
-      iconBg: "bg-indigo-500/10",
-      iconColor: "text-indigo-400",
-      sub: "Animation series",
-      href: "/dashboard/episodes",
-    },
-    {
-      label: "Characters",
-      value: allCharacters.length,
-      icon: Users,
-      iconBg: "bg-blue-500/10",
-      iconColor: "text-blue-400",
-      sub: "Cast members",
-      href: "/dashboard/characters",
-    },
-    {
-      label: "Blog Posts",
-      value: allPosts.length,
-      icon: FileText,
-      iconBg: "bg-emerald-500/10",
-      iconColor: "text-emerald-400",
-      sub: "News & updates",
-      href: "/dashboard/blog",
-    },
+    { label: 'Total Episodes', value: allEpisodes.length, Icon: Film, accent: '#FB6D10', bg: 'rgba(251,109,16,0.1)', href: '/dashboard/episodes', sub: 'Animation series' },
+    { label: 'Characters', value: allCharacters.length, Icon: Users, accent: '#F6BD60', bg: 'rgba(246,189,96,0.1)', href: '/dashboard/characters', sub: 'Cast members' },
+    { label: 'Blog Posts', value: allPosts.length, Icon: FileText, accent: '#84A59D', bg: 'rgba(132,165,157,0.1)', href: '/dashboard/blog', sub: 'News & updates' },
   ];
 
   return (
-    <div className="space-y-8">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white mb-1">Overview</h1>
-        <p className="text-gray-400">Welcome back. Here is what is happening with your content.</p>
+        <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#f0ece8', margin: 0, letterSpacing: '-0.5px' }}>Overview</h1>
+        <p style={{ fontSize: '14px', color: '#8a8499', margin: '6px 0 0' }}>Welcome back. Here is what is happening with your content.</p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      {/* Stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
         {stats.map((s) => (
-          <Link
-            key={s.label}
-            href={s.href}
-            className="bg-[#1c2128] border border-gray-800 rounded-xl p-6 shadow-sm hover:border-indigo-500/40 hover:-translate-y-0.5 transition-all duration-200 group block"
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div className={`w-10 h-10 rounded-xl ${s.iconBg} flex items-center justify-center`}>
-                <s.icon className={`w-5 h-5 ${s.iconColor}`} />
+          <Link key={s.label} href={s.href} style={{ textDecoration: 'none' }}>
+            <div style={{ ...card, transition: 'border-color 0.2s, transform 0.2s' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = s.accent + '60'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(75,59,71,0.6)'; (e.currentTarget as HTMLElement).style.transform = ''; }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <s.Icon size={20} color={s.accent} />
+                </div>
+                <ArrowRight size={16} color="#4a4560" />
               </div>
-              <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-indigo-400 transition-colors" />
+              <div style={{ fontSize: '36px', fontWeight: 700, color: '#f0ece8', lineHeight: 1 }}>{s.value}</div>
+              <div style={{ fontSize: '14px', fontWeight: 600, color: '#c5bfc2', marginTop: '4px' }}>{s.label}</div>
+              <div style={{ fontSize: '12px', color: '#6b6580', marginTop: '2px' }}>{s.sub}</div>
             </div>
-            <p className="text-4xl font-bold text-white mb-1">{s.value}</p>
-            <p className="text-sm font-medium text-gray-300">{s.label}</p>
-            <p className="text-xs text-gray-600 mt-1">{s.sub}</p>
           </Link>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent Episodes Table */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-white">Recent Episodes</h2>
-            <Link href="/dashboard/episodes" className="text-sm text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition-colors font-medium">
-              View all <ArrowRight className="w-3.5 h-3.5" />
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
+        {/* Recent Episodes */}
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <h2 style={{ fontSize: '17px', fontWeight: 700, color: '#f0ece8', margin: 0 }}>Recent Episodes</h2>
+            <Link href="/dashboard/episodes" style={{ fontSize: '13px', color: '#FB6D10', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 500 }}>
+              View all <ArrowRight size={13} />
             </Link>
           </div>
-
-          <div className="bg-[#1c2128] border border-gray-800 rounded-xl overflow-hidden">
+          <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
             {allEpisodes.length === 0 ? (
-              <div className="p-12 text-center flex flex-col items-center">
-                <div className="w-14 h-14 bg-gray-800/50 rounded-full flex items-center justify-center mb-4">
-                  <PlayCircle className="w-7 h-7 text-gray-500" />
+              <div style={{ padding: '48px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'rgba(251,109,16,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <PlayCircle size={28} color="#FB6D10" />
                 </div>
-                <p className="text-gray-300 font-medium mb-1">No episodes yet</p>
-                <p className="text-sm text-gray-500 mb-5">Start building your animation library.</p>
-                <Link href="/dashboard/episodes/new" className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                <div>
+                  <div style={{ fontSize: '15px', fontWeight: 600, color: '#c5bfc2' }}>No episodes yet</div>
+                  <div style={{ fontSize: '13px', color: '#6b6580', marginTop: '4px' }}>Start building your animation library.</div>
+                </div>
+                <Link href="/dashboard/episodes/new" style={{ background: '#FB6D10', color: '#fff', padding: '8px 20px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, textDecoration: 'none', marginTop: '4px' }}>
                   Create First Episode
                 </Link>
               </div>
             ) : (
-              <table className="w-full text-left">
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr className="border-b border-gray-800 text-xs font-semibold uppercase tracking-wider text-gray-500 bg-[#161b22]/50">
-                    <th className="py-3 px-5">Episode</th>
-                    <th className="py-3 px-5 hidden md:table-cell">Date</th>
-                    <th className="py-3 px-5 text-right">Action</th>
+                  <tr style={{ background: '#26263a', borderBottom: '1px solid rgba(75,59,71,0.5)' }}>
+                    <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 700, color: '#6b6580', textTransform: 'uppercase', letterSpacing: '1px' }}>Episode</th>
+                    <th style={{ padding: '12px 20px', textAlign: 'left', fontSize: '11px', fontWeight: 700, color: '#6b6580', textTransform: 'uppercase', letterSpacing: '1px' }}>Date</th>
+                    <th style={{ padding: '12px 20px', textAlign: 'right', fontSize: '11px', fontWeight: 700, color: '#6b6580', textTransform: 'uppercase', letterSpacing: '1px' }}>Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-800">
-                  {allEpisodes.map((ep) => (
-                    <tr key={ep.id} className="hover:bg-gray-800/20 transition-colors group">
-                      <td className="py-3.5 px-5">
-                        <div className="flex items-center gap-3">
-                          <div className="relative w-16 h-10 rounded-md overflow-hidden bg-gray-800 flex-shrink-0 border border-gray-700">
+                <tbody>
+                  {allEpisodes.map((ep, i) => (
+                    <tr key={ep.id} style={{ borderBottom: i < allEpisodes.length - 1 ? '1px solid rgba(75,59,71,0.3)' : 'none' }}>
+                      <td style={{ padding: '14px 20px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                          <div style={{ position: 'relative', width: '64px', height: '40px', borderRadius: '8px', overflow: 'hidden', background: '#1a1a2e', border: '1px solid rgba(75,59,71,0.5)', flexShrink: 0 }}>
                             {ep.thumbnail ? (
-                              <Image src={ep.thumbnail} alt={ep.title} fill className="object-cover" />
+                              <Image src={ep.thumbnail} alt={ep.title} fill style={{ objectFit: 'cover' }} />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center">
-                                <Film className="w-4 h-4 text-gray-600" />
+                              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Film size={16} color="#4a4560" />
                               </div>
                             )}
                           </div>
-                          <p className="text-sm font-medium text-gray-200 group-hover:text-indigo-300 transition-colors truncate max-w-[160px]">
-                            {ep.title}
-                          </p>
+                          <span style={{ fontSize: '13px', fontWeight: 600, color: '#c5bfc2' }}>{ep.title}</span>
                         </div>
                       </td>
-                      <td className="py-3.5 px-5 hidden md:table-cell">
-                        <span className="text-sm text-gray-500">{ep.releaseDate ?? "—"}</span>
-                      </td>
-                      <td className="py-3.5 px-5 text-right">
-                        <Link href={`/dashboard/episodes/${ep.id}`} className="text-sm font-medium text-gray-500 hover:text-indigo-400 transition-colors">
-                          Edit
-                        </Link>
+                      <td style={{ padding: '14px 20px', fontSize: '13px', color: '#6b6580' }}>{ep.releaseDate ?? '—'}</td>
+                      <td style={{ padding: '14px 20px', textAlign: 'right' }}>
+                        <Link href={`/dashboard/episodes/${ep.id}`} style={{ fontSize: '13px', fontWeight: 500, color: '#FB6D10', textDecoration: 'none' }}>Edit</Link>
                       </td>
                     </tr>
                   ))}
@@ -136,31 +114,32 @@ export default async function DashboardOverview() {
           </div>
         </div>
 
-        {/* Recent Blog Posts & Quick Actions */}
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-white">Recent Posts</h2>
-              <Link href="/dashboard/blog" className="text-sm text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition-colors font-medium">
-                View all <ArrowRight className="w-3.5 h-3.5" />
+        {/* Right col: recent posts + quick actions */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          {/* Recent Posts */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <h2 style={{ fontSize: '17px', fontWeight: 700, color: '#f0ece8', margin: 0 }}>Recent Posts</h2>
+              <Link href="/dashboard/blog" style={{ fontSize: '13px', color: '#FB6D10', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 500 }}>
+                View all <ArrowRight size={13} />
               </Link>
             </div>
-            <div className="bg-[#1c2128] border border-gray-800 rounded-xl overflow-hidden">
+            <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
               {allPosts.length === 0 ? (
-                <div className="p-8 text-center">
-                  <p className="text-sm text-gray-500 mb-4">No posts yet.</p>
-                  <Link href="/dashboard/blog/new" className="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors">Write first post</Link>
+                <div style={{ padding: '24px', textAlign: 'center', fontSize: '13px', color: '#6b6580' }}>
+                  No posts yet.{' '}
+                  <Link href="/dashboard/blog/new" style={{ color: '#FB6D10', textDecoration: 'none', fontWeight: 500 }}>Write one</Link>
                 </div>
               ) : (
-                <div className="divide-y divide-gray-800">
-                  {allPosts.map((post) => (
-                    <Link key={post.id} href={`/dashboard/blog/${post.id}`} className="flex items-start gap-3 p-4 hover:bg-gray-800/20 transition-colors group block">
-                      <div className="w-1 h-full flex-shrink-0 self-stretch">
-                        <div className="w-1 h-full rounded-full bg-indigo-500/30 group-hover:bg-indigo-500 transition-colors" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium text-gray-200 group-hover:text-indigo-300 transition-colors truncate">{post.title}</p>
-                        <p className="text-xs text-gray-600 mt-0.5">{post.author ?? "Unknown"} · {post.date ?? "—"}</p>
+                <div>
+                  {allPosts.map((post, i) => (
+                    <Link key={post.id} href={`/dashboard/blog/${post.id}`} style={{ textDecoration: 'none' }}>
+                      <div style={{ padding: '14px 16px', borderBottom: i < allPosts.length - 1 ? '1px solid rgba(75,59,71,0.3)' : 'none', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                        <div style={{ width: '3px', height: '36px', borderRadius: '4px', background: '#FB6D10', flexShrink: 0, marginTop: '2px', opacity: 0.5 }} />
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ fontSize: '13px', fontWeight: 600, color: '#c5bfc2', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{post.title}</div>
+                          <div style={{ fontSize: '11px', color: '#6b6580', marginTop: '2px' }}>{post.author ?? 'Unknown'} · {post.date ?? '—'}</div>
+                        </div>
                       </div>
                     </Link>
                   ))}
@@ -170,39 +149,29 @@ export default async function DashboardOverview() {
           </div>
 
           {/* Quick Actions */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-bold text-white">Quick Actions</h2>
-            <div className="flex flex-col gap-2">
-              <Link href="/dashboard/episodes/new" className="flex items-center gap-3 p-3.5 bg-[#1c2128] border border-gray-800 rounded-xl hover:border-indigo-500/40 hover:bg-indigo-500/5 transition-all group">
-                <div className="w-9 h-9 rounded-lg bg-indigo-500/10 flex items-center justify-center flex-shrink-0">
-                  <Film className="w-4 h-4 text-indigo-400" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-200">Create Episode</p>
-                  <p className="text-xs text-gray-600">Add a new episode</p>
-                </div>
-                <Plus className="w-4 h-4 text-gray-600 group-hover:text-indigo-400 ml-auto transition-colors" />
-              </Link>
-              <Link href="/dashboard/characters/new" className="flex items-center gap-3 p-3.5 bg-[#1c2128] border border-gray-800 rounded-xl hover:border-blue-500/40 hover:bg-blue-500/5 transition-all group">
-                <div className="w-9 h-9 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-                  <Users className="w-4 h-4 text-blue-400" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-200">Add Character</p>
-                  <p className="text-xs text-gray-600">Register a new character</p>
-                </div>
-                <Plus className="w-4 h-4 text-gray-600 group-hover:text-blue-400 ml-auto transition-colors" />
-              </Link>
-              <Link href="/dashboard/blog/new" className="flex items-center gap-3 p-3.5 bg-[#1c2128] border border-gray-800 rounded-xl hover:border-emerald-500/40 hover:bg-emerald-500/5 transition-all group">
-                <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
-                  <FileText className="w-4 h-4 text-emerald-400" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-200">Write Blog Post</p>
-                  <p className="text-xs text-gray-600">Publish news and updates</p>
-                </div>
-                <Plus className="w-4 h-4 text-gray-600 group-hover:text-emerald-400 ml-auto transition-colors" />
-              </Link>
+          <div>
+            <h2 style={{ fontSize: '17px', fontWeight: 700, color: '#f0ece8', margin: '0 0 16px' }}>Quick Actions</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {[
+                { href: '/dashboard/episodes/new', label: 'Create Episode', sub: 'Add a new episode', Icon: Film, accent: '#FB6D10', bg: 'rgba(251,109,16,0.08)' },
+                { href: '/dashboard/characters/new', label: 'Add Character', sub: 'Register a character', Icon: Users, accent: '#F6BD60', bg: 'rgba(246,189,96,0.08)' },
+                { href: '/dashboard/blog/new', label: 'Write Blog Post', sub: 'Publish an update', Icon: FileText, accent: '#84A59D', bg: 'rgba(132,165,157,0.08)' },
+              ].map(({ href, label, sub, Icon, accent, bg }) => (
+                <Link key={href} href={href} style={{ textDecoration: 'none' }}>
+                  <div style={{ ...card, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '14px', transition: 'border-color 0.2s' }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = accent + '50'}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(75,59,71,0.6)'}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Icon size={16} color={accent} />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: '#c5bfc2' }}>{label}</div>
+                      <div style={{ fontSize: '11px', color: '#6b6580' }}>{sub}</div>
+                    </div>
+                    <Plus size={14} color="#4a4560" />
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
