@@ -73,7 +73,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         
         <div className="p-4 border-t border-gray-800 bg-[#12161c]">
           <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-800 transition-colors">
-            <UserButton afterSignOutUrl="/" appearance={{ elements: { avatarBox: "w-9 h-9 border border-gray-700" } }} />
+            <UserButton appearance={{ elements: { avatarBox: "w-9 h-9 border border-gray-700" } }} />
             <div className="flex-1 min-w-0 overflow-hidden">
               <p className="text-sm text-gray-200 font-medium truncate">{user?.firstName || 'Admin'}</p>
               <p className="text-xs text-gray-500 truncate">{email}</p>
