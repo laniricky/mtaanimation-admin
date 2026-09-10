@@ -158,8 +158,8 @@ export default async function DashboardOverview() {
               ].map(({ href, label, sub, Icon, accent, bg }) => (
                 <Link key={href} href={href} style={{ textDecoration: 'none' }}>
                   <div style={{ ...card, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '14px', transition: 'border-color 0.2s' }}
-                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = accent + '50'}
-                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(75,59,71,0.6)'}>
+                    
+                    >
                     <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <Icon size={16} color={accent} />
                     </div>
