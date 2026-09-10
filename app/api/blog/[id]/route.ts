@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import { auth } from '@clerk/nextjs/server';
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_SITE_URL || '*',
+  'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mtaanimation.com',
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
