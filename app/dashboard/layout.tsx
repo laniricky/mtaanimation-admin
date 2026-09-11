@@ -2,7 +2,7 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
-import { LayoutDashboard, Film, Users, FileText, Plus, Settings } from 'lucide-react';
+import { LayoutDashboard, Film, Users, FileText, Plus, Settings, MessageSquare } from 'lucide-react';
 
 const ALLOWED_EMAILS = [
   'mtaanimation0@gmail.com',
@@ -46,6 +46,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
               { href: '/dashboard/episodes', label: 'Episodes', Icon: Film },
               { href: '/dashboard/characters', label: 'Characters', Icon: Users },
               { href: '/dashboard/blog', label: 'Blog Posts', Icon: FileText },
+              { href: '/dashboard/messages', label: 'Messages', Icon: MessageSquare },
             ].map(({ href, label, Icon }) => (
               <Link key={href} href={href} style={{ textDecoration: 'none' }}>
                 <div style={{

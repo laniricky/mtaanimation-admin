@@ -1,4 +1,4 @@
-﻿import { pgTable, serial, text, boolean, date } from 'drizzle-orm/pg-core';
+﻿import { pgTable, serial, text, boolean, timestamp } from 'drizzle-orm/pg-core';
 
 export const episodes = pgTable('episodes', {
   id: serial('id').primaryKey(),
@@ -27,4 +27,14 @@ export const blogPosts = pgTable('blog_posts', {
   date: text('date'),
   author: text('author'),
   image: text('image'),
+});
+
+export const contactMessages = pgTable('contact_messages', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull(),
+  subject: text('subject').notNull(),
+  message: text('message').notNull(),
+  read: boolean('read').default(false),
+  createdAt: timestamp('created_at').defaultNow(),
 });
