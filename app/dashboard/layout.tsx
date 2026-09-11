@@ -1,8 +1,8 @@
-﻿import { currentUser } from '@clerk/nextjs/server';
+import { currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { UserButton } from '@clerk/nextjs';
-import { LayoutDashboard, Film, Users, FileText, Plus, Settings, MessageSquare } from 'lucide-react';
+import { UserButton, SignOutButton } from '@clerk/nextjs';
+import { LayoutDashboard, Film, Users, FileText, Plus, Settings, MessageSquare, LogOut } from 'lucide-react';
 
 const ALLOWED_EMAILS = [
   'mtaanimation0@gmail.com',
@@ -79,6 +79,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
               <div style={{ fontSize: '13px', fontWeight: 600, color: '#f0ece8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.firstName || 'Admin'}</div>
               <div style={{ fontSize: '11px', color: '#6b6580', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email}</div>
             </div>
+            <SignOutButton>
+              <button style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#6b6580', padding: '4px', display: 'flex', alignItems: 'center', transition: 'color 0.2s' }} title="Sign out" className="hover:text-[#e55a5a]">
+                <LogOut size={16} />
+              </button>
+            </SignOutButton>
           </div>
         </div>
       </aside>
