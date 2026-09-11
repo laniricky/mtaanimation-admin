@@ -12,7 +12,7 @@ const ALLOWED_ORIGINS = [
 ];
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  const allowedOrigin = (origin && ALLOWED_ORIGINS.includes(origin)) ? origin : 'https://www.mtaanimation.com';
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
