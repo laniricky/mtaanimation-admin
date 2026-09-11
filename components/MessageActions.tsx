@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState } from "react";
 import { Check, MailOpen, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";

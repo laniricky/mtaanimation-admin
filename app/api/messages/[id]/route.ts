@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { contactMessages } from '@/lib/schema';
 import { eq } from 'drizzle-orm';
@@ -12,18 +12,20 @@ function getCorsHeaders(origin: string | null) {
 export async function OPTIONS(req: NextRequest) {
   return new NextResponse(null, { status: 204, headers: getCorsHeaders(req.headers.get('origin')) });
 }
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const origin = req.headers.get('origin');
   const { userId } = await auth();
   if (!userId) return new NextResponse('Unauthorized', { status: 401, headers: getCorsHeaders(origin) });
   const body = await req.json();
-  const updated = await db.update(contactMessages).set({ read: body.read }).where(eq(contactMessages.id, Number(params.id))).returning();
+  const updated = await db.update(contactMessages).set({ read: body.read }).where(eq(contactMessages.id, Number(id))).returning();
   return NextResponse.json(updated[0], { headers: getCorsHeaders(origin) });
 }
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const origin = req.headers.get('origin');
   const { userId } = await auth();
   if (!userId) return new NextResponse('Unauthorized', { status: 401, headers: getCorsHeaders(origin) });
-  await db.delete(contactMessages).where(eq(contactMessages.id, Number(params.id)));
+  await db.delete(contactMessages).where(eq(contactMessages.id, Number(id)));
   return NextResponse.json({ success: true }, { headers: getCorsHeaders(origin) });
 }
