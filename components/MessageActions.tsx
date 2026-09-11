@@ -9,7 +9,7 @@ export default function MessageActions({ id, read }: { id: number; read: boolean
 
   const toggleRead = async () => {
     setLoading(true);
-    await fetch(/api/messages/ + id, { method: "PATCH", body: JSON.stringify({ read: !read }) });
+    await fetch('/api/messages/' + id, { method: "PATCH", body: JSON.stringify({ read: !read }) });
     router.refresh();
     setLoading(false);
   };
@@ -17,7 +17,7 @@ export default function MessageActions({ id, read }: { id: number; read: boolean
   const deleteMsg = async () => {
     if (!confirm("Delete this message?")) return;
     setLoading(true);
-    await fetch(/api/messages/ + id, { method: "DELETE" });
+    await fetch('/api/messages/' + id, { method: "DELETE" });
     router.refresh();
     setLoading(false);
   };
